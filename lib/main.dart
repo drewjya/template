@@ -8,10 +8,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final sharedPreferences = await SharedPreferences.getInstance();
+  
   runApp(ProviderScope(
     overrides: [
       preferencesProvider.overrideWith((ref) => sharedPreferences),
     ],
-    child: const App(),
+    child: App(
+      
+    ),
   ));
 }

@@ -1,7 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:google_fonts/google_fonts.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:template/common/widget/responsive_wrapper.dart';
-import 'package:template/core/core.dart';
+import 'package:template/core/router/auto_route_observer.dart';
+import 'package:template/core/router/router.dart';
 import 'package:template/template.dart';
 
 part 'app.g.dart';
@@ -9,25 +11,48 @@ part 'app.g.dart';
 final navigatorKey = GlobalKey<NavigatorState>(debugLabel: 'routerKey');
 
 @riverpod
-GoRouter router(RouterRef ref) {
-  final notifier = ref.watch(routerListenableProvider.notifier);
-  return GoRouter(
-    navigatorKey: navigatorKey,
-    refreshListenable: notifier,
-    initialLocation: SplashRoute.path,
-    debugLogDiagnostics: true,
-    routes: $appRoutes,
-    redirect: notifier.redirect,
-  );
+Raw<AppRouter> autoRoute(AutoRouteRef ref) {
+  return AppRouter(ref: ref);
+}
+
+@Riverpod(keepAlive: true)
+class AuthService extends _$AuthService implements Listenable {
+  VoidCallback? _listener;
+  @override
+  bool build() {
+    _listener?.call();
+    return false;
+  }
+
+  void loginAndVerify() {
+    state = true;
+  }
+
+  @override
+  void addListener(VoidCallback listener) {
+    _listener = listener;
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    _listener = null;
+  }
 }
 
 class App extends HookConsumerWidget {
-  const App({super.key});
+  const App({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      routerConfig: ref.watch(routerProvider),
+      routerConfig: ref.watch(autoRouteProvider).config(
+            reevaluateListenable: ref.watch(authServiceProvider.notifier),
+            navigatorObservers: () => [
+              RouterObserver(),
+            ],
+          ),
       title: 'template',
       theme: _buildTheme(),
       builder: (context, child) =>

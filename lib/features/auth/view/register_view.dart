@@ -1,27 +1,19 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:template/common/widget/v_action_text_form_field.dart';
 import 'package:template/common/widget/v_appbar.dart';
 import 'package:template/constants/padding_const.dart';
-import 'package:template/core/core.dart';
 import 'package:template/features/auth/providers/auth_providers.dart';
 import 'package:template/template.dart';
 
+@RoutePage(
+  deferredLoading: true,
+)
 class RegisterView extends ConsumerWidget {
   const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(authenticationProvider, (previous, next) {
-      switch (next) {
-        case AsyncLoading():
-          showDialog(
-            context: context,
-            builder: (context) =>
-                const Center(child: CircularProgressIndicator()),
-          );
-        default:
-          break;
-      }
-    });
+    
     return Scaffold(
         appBar: VAppbar(
           ctx: context,
@@ -55,7 +47,7 @@ class RegisterView extends ConsumerWidget {
                 ),
               ),
               TextButton(
-                onPressed: () => context.go(LoginRoute.path),
+                onPressed: () {},
                 child: const Text(
                   "Sudah Punya Akun? Masuk",
                 ),

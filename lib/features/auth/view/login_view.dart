@@ -1,10 +1,15 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:template/app/app.dart';
 import 'package:template/common/widget/v_action_text_form_field.dart';
 import 'package:template/common/widget/v_appbar.dart';
 import 'package:template/constants/padding_const.dart';
-import 'package:template/core/core.dart';
+import 'package:template/core/router/router.gr.dart';
 import 'package:template/features/auth/providers/auth_providers.dart';
 import 'package:template/template.dart';
 
+@RoutePage(
+  deferredLoading: true,
+)
 class LoginView extends ConsumerWidget {
   const LoginView({super.key});
 
@@ -41,28 +46,31 @@ class LoginView extends ConsumerWidget {
               VActionTextFormField.email(),
               PConst.h16,
               VActionTextFormField.password(),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () => context.push(ForgetPasswordRoute.path),
-                    child: const Text(
+                    onPressed: null,
+                    child: Text(
                       "Lupa Password ?",
                     ),
                   )
                 ],
               ),
               ElevatedButton(
-                onPressed: () => context.push(UserRoute.path),
+                onPressed: () {
+                  ref.read(authServiceProvider.notifier).loginAndVerify();
+                  ref.read(autoRouteProvider).replace(const UserRoute());
+                },
                 child: const Center(
                   child: Text(
                     "Login",
                   ),
                 ),
               ),
-              TextButton(
-                onPressed: () => context.push(RegisterRoute.path),
-                child: const Text(
+              const TextButton(
+                onPressed: null,
+                child: Text(
                   "Belum Punya Akun? Daftar",
                 ),
               )

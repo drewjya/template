@@ -1,24 +1,17 @@
-import 'package:template/core/router/routes.dart';
+import 'package:auto_route/auto_route.dart';
+
 import 'package:template/features/auth/providers/auth_providers.dart';
 import 'package:template/template.dart';
 
+@RoutePage(
+  deferredLoading: true,
+)
 class UserView extends ConsumerWidget {
   const UserView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(authenticationProvider, (previous, next) {
-      switch (next) {
-        case AsyncLoading():
-          showDialog(
-            context: context,
-            builder: (context) =>
-                const Center(child: CircularProgressIndicator()),
-          );
-        default:
-          break;
-      }
-    });
+  
 
     return Scaffold(
       appBar: AppBar(
@@ -53,7 +46,7 @@ class UserView extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    context.push(ForgetPasswordRoute.path);
+                    
                   },
                   icon: const Icon(Icons.logout),
                   label: const Text('Forget Password'),

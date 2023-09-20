@@ -1,9 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:template/common/widget/v_action_text_form_field.dart';
 import 'package:template/common/widget/v_appbar.dart';
 import 'package:template/common/widget/v_back_button.dart';
 import 'package:template/constants/padding_const.dart';
 import 'package:template/template.dart';
 
+@RoutePage(
+  deferredLoading: true,
+)
 class ForgetPasswordView extends HookConsumerWidget {
   const ForgetPasswordView({super.key});
   @override
