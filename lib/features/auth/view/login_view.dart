@@ -59,7 +59,7 @@ class LoginView extends ConsumerWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  ref.read(authServiceProvider.notifier).loginAndVerify();
+                  ref.read(authServiceProvider).loginAndVerify();
                   ref.read(autoRouteProvider).replace(const UserRoute());
                 },
                 child: const Center(

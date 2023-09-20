@@ -16,39 +16,51 @@ Raw<AppRouter> autoRoute(AutoRouteRef ref) {
 }
 
 @Riverpod(keepAlive: true)
-class AuthService extends _$AuthService implements Listenable {
-  VoidCallback? _listener;
-  @override
-  bool build() {
-    _listener?.call();
-    return false;
+Raw<AuthService> authService(AuthServiceRef ref) {
+  throw UnimplementedError();
+}
+
+class AuthService extends ChangeNotifier {
+  bool _isAuthenticated = false;
+
+  bool get isAuthenticated => _isAuthenticated;
+
+  bool _isVerified = false;
+
+  bool get isVerified => _isVerified;
+
+  set isVerified(bool value) {
+    _isVerified = value;
+    notifyListeners();
+  }
+
+  set isAuthenticated(bool value) {
+    _isAuthenticated = value;
+    if (!_isAuthenticated) {
+      _isVerified = false;
+    }
+    notifyListeners();
   }
 
   void loginAndVerify() {
-    state = true;
-  }
-
-  @override
-  void addListener(VoidCallback listener) {
-    _listener = listener;
-  }
-
-  @override
-  void removeListener(VoidCallback listener) {
-    _listener = null;
+    _isAuthenticated = true;
+    _isVerified = true;
+    notifyListeners();
   }
 }
 
 class App extends HookConsumerWidget {
+  final AuthService authService;
   const App({
     super.key,
+    required this.authService,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       routerConfig: ref.watch(autoRouteProvider).config(
-            reevaluateListenable: ref.watch(authServiceProvider.notifier),
+            reevaluateListenable: authService,
             navigatorObservers: () => [
               RouterObserver(),
             ],

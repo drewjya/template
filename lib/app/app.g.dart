@@ -6,7 +6,7 @@ part of 'app.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$autoRouteHash() => r'c3bd63756a926ee739d576751529c276f5bb5b2a';
+String _$autoRouteHash() => r'b02e2bafeeb3efe9cfd71a03f4db537c13406b0e';
 
 /// See also [autoRoute].
 @ProviderFor(autoRoute)
@@ -20,12 +20,12 @@ final autoRouteProvider = AutoDisposeProvider<AppRouter>.internal(
 );
 
 typedef AutoRouteRef = AutoDisposeProviderRef<AppRouter>;
-String _$authServiceHash() => r'f71d4723e9e2265747ae5e66bef735f9c4ee1b08';
+String _$authServiceHash() => r'a89bf74945e9a129aed11f7e58e3ffb01f2ecda8';
 
-/// See also [AuthService].
-@ProviderFor(AuthService)
-final authServiceProvider = NotifierProvider<AuthService, bool>.internal(
-  AuthService.new,
+/// See also [authService].
+@ProviderFor(authService)
+final authServiceProvider = Provider<AuthService>.internal(
+  authService,
   name: r'authServiceProvider',
   debugGetCreateSourceHash:
       const bool.fromEnvironment('dart.vm.product') ? null : _$authServiceHash,
@@ -33,6 +33,6 @@ final authServiceProvider = NotifierProvider<AuthService, bool>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef _$AuthService = Notifier<bool>;
+typedef AuthServiceRef = ProviderRef<AuthService>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
