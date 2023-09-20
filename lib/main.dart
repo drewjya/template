@@ -8,12 +8,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final sharedPreferences = await SharedPreferences.getInstance();
-  final authService = AuthService();
+
   runApp(ProviderScope(
     overrides: [
       preferencesProvider.overrideWith((ref) => sharedPreferences),
-      authServiceProvider.overrideWith((ref) => authService),
     ],
-    child: App(authService: authService),
+    child: const App(),
   ));
 }

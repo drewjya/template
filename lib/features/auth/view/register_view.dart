@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:template/app/app.dart';
 import 'package:template/common/widget/v_action_text_form_field.dart';
 import 'package:template/common/widget/v_appbar.dart';
 import 'package:template/constants/padding_const.dart';
+import 'package:template/core/router/router.gr.dart';
 import 'package:template/features/auth/providers/auth_providers.dart';
 import 'package:template/template.dart';
 
@@ -13,7 +15,6 @@ class RegisterView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
     return Scaffold(
         appBar: VAppbar(
           ctx: context,
@@ -47,7 +48,9 @@ class RegisterView extends ConsumerWidget {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  ref.read(autoRouteProvider).replace(const LoginRoute());
+                },
                 child: const Text(
                   "Sudah Punya Akun? Masuk",
                 ),

@@ -17,16 +17,25 @@ class LoginView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen(authenticationProvider, (previous, next) {
       switch (next) {
+        case AsyncData(:final value):
+          value.map(
+            signedIn: (value) {
+              ref.read(autoRouteProvider).replaceAll([const UserRoute()]);
+            },
+            signedOut: (value) {
+              ref.read(autoRouteProvider).replaceAll([const LoginRoute()]);
+            },
+          );
+
         case AsyncLoading():
           showDialog(
             context: context,
             builder: (context) =>
                 const Center(child: CircularProgressIndicator()),
           );
-        default:
-          break;
       }
     });
+
     return Scaffold(
         appBar: VAppbar(
           ctx: context,
@@ -46,11 +55,13 @@ class LoginView extends ConsumerWidget {
               VActionTextFormField.email(),
               PConst.h16,
               VActionTextFormField.password(),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: null,
+                    onPressed: () => ref
+                        .read(autoRouteProvider)
+                        .push(const ForgetPasswordRoute()),
                     child: Text(
                       "Lupa Password ?",
                     ),
@@ -59,8 +70,9 @@ class LoginView extends ConsumerWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  ref.read(authServiceProvider).loginAndVerify();
-                  ref.read(autoRouteProvider).replace(const UserRoute());
+                  ref
+                      .read(authenticationProvider.notifier)
+                      .login("My Email", "some-updated-secret-auth-token");
                 },
                 child: const Center(
                   child: Text(
@@ -68,8 +80,9 @@ class LoginView extends ConsumerWidget {
                   ),
                 ),
               ),
-              const TextButton(
-                onPressed: null,
+              TextButton(
+                onPressed: () =>
+                    ref.read(autoRouteProvider).replace(const RegisterRoute()),
                 child: Text(
                   "Belum Punya Akun? Daftar",
                 ),

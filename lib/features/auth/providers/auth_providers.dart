@@ -13,7 +13,7 @@ const _dummyUser = Auth.signedIn(
   token: 'some-updated-secret-auth-token',
 );
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Authentication extends _$Authentication {
   @override
   Future<Auth> build() async {
@@ -30,7 +30,7 @@ class Authentication extends _$Authentication {
         const Duration(milliseconds: 300),
         () {
           final a = Random().nextInt(10);
-          if (a % 2 == 0) {
+          if (a % 2 != 0) {
             return "$a";
           }
           return null;

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:template/app/app.dart';
 import 'package:template/core/router/router.gr.dart';
+import 'package:template/features/auth/providers/auth_providers.dart';
 import 'package:template/template.dart';
 
 @RoutePage(
@@ -12,15 +12,18 @@ class SplashView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    useEffect(() {
-      Future.delayed(
-        const Duration(seconds: 2),
-        () {
+    ref.listen(authenticationProvider, (previous, next) {
+      print("$next");
+      switch (next) {
+        case AsyncLoading():
+          break;
+        case AsyncData():
           ref.read(autoRouteProvider).replace(const UserRoute());
-        },
-      );
-      return;
-    }, []);
+        case AsyncError():
+          ref.read(autoRouteProvider).replace(const LoginRoute());
+      }
+    });
+
     return const Scaffold(
       body: Center(child: Text('Splash Page')),
     );

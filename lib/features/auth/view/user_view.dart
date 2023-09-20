@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
-
+import 'package:template/app/app.dart';
+import 'package:template/core/router/router.gr.dart';
 import 'package:template/features/auth/providers/auth_providers.dart';
 import 'package:template/template.dart';
 
@@ -11,8 +12,27 @@ class UserView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-  
+    ref.listen(authenticationProvider, (previous, next) {
+      switch (next) {
+        case AsyncLoading():
+          showDialog(
+            context: context,
+            builder: (context) =>
+                const Center(child: CircularProgressIndicator()),
+          );
 
+        case AsyncData(:final value):
+          value.map(
+            signedIn: (value) {},
+            signedOut: (value) {
+              ref.read(autoRouteProvider).replaceAll([const LoginRoute()]);
+            },
+          );
+
+        case AsyncError():
+          ref.read(autoRouteProvider).replace(const LoginRoute());
+      }
+    });
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -46,7 +66,9 @@ class UserView extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 24),
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    
+                    ref
+                        .read(autoRouteProvider)
+                        .push(const ForgetPasswordRoute());
                   },
                   icon: const Icon(Icons.logout),
                   label: const Text('Forget Password'),
